@@ -46,15 +46,12 @@ pipeline {
         }
 
         stage('Run Docker (Smoke)') {
-    steps {
-        bat '''
-        docker rm -f react-smoke || exit 0
-        docker run -d -p 3005:80 --name react-smoke react-frontend
-        ping 127.0.0.1 -n 6 > nul
-        '''
-    }
-}
-
+            when {
+                anyOf {
+                    branch 'dev'
+                    branch 'main'
+                }
+            }
             steps {
                 bat '''
                 docker rm -f react-smoke || exit 0
